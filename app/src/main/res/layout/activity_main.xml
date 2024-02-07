@@ -9,60 +9,11 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/red_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FF0000"
-        app:cornerRadius="0px"
-        android:text="Red" />
-
-    <Button
-        android:id="@+id/orange_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FF7600"
-        app:cornerRadius="0px"
-        android:text="Orange" />
-
-    <Button
-        android:id="@+id/yellow_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FFDE04"
-        app:cornerRadius="0px"
-        android:text="Yellow" />
-
-    <Button
-        android:id="@+id/green_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#47DA13"
-        app:cornerRadius="0px"
-        android:text="Green" />
-
-    <Button
-        android:id="@+id/blue_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#0E88C1"
-        app:cornerRadius="0px"
-        android:text="Blue" />
-
-    <Button
-        android:id="@+id/indigo_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#7A15DF"
-        app:cornerRadius="0px"
-        android:text="Indigo" />
-
-    <Button
-        android:id="@+id/violet_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#E964ED"
-        app:cornerRadius="0px"
-        android:text="Violet" />
+        android:id="@+id/button"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#00DDCB"
+        android:text="0" />
 
 
 
