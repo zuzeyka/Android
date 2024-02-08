@@ -1,91 +1,50 @@
 package com.zuzeyka.test;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.Toast;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private enum Player {X, O}
-
-    private Player currentPlayer = Player.X;
-    private Player[][] board = new Player[3][3];
-    private Button[][] buttons = new Button[3][3];
+    private List<WishlistItem> wishlistItems;
+    private WishlistAdapter adapter;
+    private TextView totalPriceTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        GridLayout gridLayout = findViewById(R.id.gridLayout);
+        ListView listView = findViewById(R.id.listView);
+        totalPriceTextView = findViewById(R.id.totalPriceTextView);
 
+        wishlistItems = new ArrayList<>();
+        // Add some sample wishlist items
+        wishlistItems.add(new WishlistItem("Smartphone",R.drawable.f, 500));
+        wishlistItems.add(new WishlistItem("Headphones", R.drawable.ff, 200));
+        wishlistItems.add(new WishlistItem("Smartwatch", R.drawable.fff, 300));
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                buttons[i][j] = new Button(this);
-                buttons[i][j].setText("");
-                buttons[i][j].setOnClickListener(new ClickListener(i, j));
-                gridLayout.addView(buttons[i][j]);
-            }
-        }
+        adapter = new WishlistAdapter(this, R.layout.wishlist_item, wishlistItems);
+        listView.setAdapter(adapter);
+
+        updateTotalPrice();
     }
 
-    class ClickListener implements View.OnClickListener {
-        private int x;
-        private int y;
-
-        public ClickListener(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (buttons[x][y].getText().toString().equals("")) {
-                buttons[x][y].setText(currentPlayer.toString());
-                board[x][y] = currentPlayer;
-                if (isWinner(x, y)) {
-                    Toast.makeText(getApplicationContext(), "Player " + currentPlayer + " wins!", Toast.LENGTH_SHORT).show();
-                } else {
-                    currentPlayer = (currentPlayer == Player.X) ? Player.O : Player.X;
-                }
+    void updateTotalPrice() {
+        double totalPrice = 0;
+        for (WishlistItem item : wishlistItems) {
+            if (item.isChecked()) {
+                totalPrice += item.getPrice();
             }
         }
-    }
-
-    private boolean isWinner(int x, int y) {
-        String player = currentPlayer.toString();
-
-        if (buttons[x][0].getText().equals(player) &&
-                buttons[x][1].getText().equals(player) &&
-                buttons[x][2].getText().equals(player)) {
-            return true;
-        }
-
-        if (buttons[0][y].getText().equals(player) &&
-                buttons[1][y].getText().equals(player) &&
-                buttons[2][y].getText().equals(player)) {
-            return true;
-        }
-
-        if (buttons[0][0].getText().equals(player) &&
-                buttons[1][1].getText().equals(player) &&
-                buttons[2][2].getText().equals(player)) {
-            return true;
-        }
-
-        if (buttons[0][2].getText().equals(player) &&
-                buttons[1][1].getText().equals(player) &&
-                buttons[2][0].getText().equals(player)) {
-            return true;
-        }
-
-        return false;
+        totalPriceTextView.setText(String.format("Total: $%.2f", totalPrice));
     }
 }
+
+
+
