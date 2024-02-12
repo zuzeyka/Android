@@ -1,50 +1,77 @@
 package com.zuzeyka.test;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RemoteViews;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
-import java.util.List;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<WishlistItem> wishlistItems;
-    private WishlistAdapter adapter;
-    private TextView totalPriceTextView;
+    private static final String CHANNEL_ID = "custom_notification_channel";
+    private static final int NOTIFICATION_ID = 123;
+    private int notificationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView listView = findViewById(R.id.listView);
-        totalPriceTextView = findViewById(R.id.totalPriceTextView);
+        Button notifyButton = findViewById(R.id.notify_button);
+        notifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendCustomNotification();
+            }
+        });
 
-        wishlistItems = new ArrayList<>();
-        // Add some sample wishlist items
-        wishlistItems.add(new WishlistItem("Smartphone",R.drawable.f, 500));
-        wishlistItems.add(new WishlistItem("Headphones", R.drawable.ff, 200));
-        wishlistItems.add(new WishlistItem("Smartwatch", R.drawable.fff, 300));
-
-        adapter = new WishlistAdapter(this, R.layout.wishlist_item, wishlistItems);
-        listView.setAdapter(adapter);
-
-        updateTotalPrice();
+        createNotificationChannel();
     }
 
-    void updateTotalPrice() {
-        double totalPrice = 0;
-        for (WishlistItem item : wishlistItems) {
-            if (item.isChecked()) {
-                totalPrice += item.getPrice();
-            }
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Custom Notification Channel";
+            String description = "This channel is for custom notifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
-        totalPriceTextView.setText(String.format("Total: $%.2f", totalPrice));
+    }
+
+    private void sendCustomNotification() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.custom_notification_small);
+        RemoteViews notificationLayoutExpanded = new RemoteViews(getPackageName(), R.layout.custom_notification_large);
+
+
+        Notification customNotification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(notificationLayout)
+                .setCustomBigContentView(notificationLayoutExpanded)
+                .build();
+
+        notificationManager.notify(666, customNotification);
+
+
+    }
+
+    public void updateTotalPrice() {
+
     }
 }
-
-
-

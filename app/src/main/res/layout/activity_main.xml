@@ -6,19 +6,11 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/totalPriceTextView"/>
-
-    <TextView
-        android:id="@+id/totalPriceTextView"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/notify_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="Total: $0.00"
-        android:textAlignment="center"
-        android:textSize="18sp"/>
+        android:layout_centerInParent="true"
+        android:text="Click Me" />
 
 </RelativeLayout>
