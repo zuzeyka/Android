@@ -13,3 +13,7 @@ https://github.com/zuzeyka/Android/assets/75243441/8215be08-eb47-4446-9fd0-b3790
 Fourth HW
 
 https://github.com/zuzeyka/Android/assets/75243441/2be95802-3c18-49fe-9c67-d395445628b4
+
+Fifth HW
+
+https://github.com/zuzeyka/Android/assets/75243441/f161aaf7-5372-45e1-98e9-486a3912a84d
