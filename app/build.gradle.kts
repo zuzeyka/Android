@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.zuzeyka.test"
-    compileSdk = 34
+    compileSdkVersion(rootProject.extra["compileSdkVersion"] as Int)
 
     defaultConfig {
         applicationId = "com.zuzeyka.test"
@@ -31,7 +31,9 @@ android {
 dependencies {
 
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation ("com.android.support:appcompat-v7:28.0.0")
     implementation("com.google.android.material:material:1.9.0")
+    implementation ("com.jjoe64:graphview:4.2.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
