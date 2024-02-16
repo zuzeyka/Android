@@ -20,4 +20,4 @@ https://github.com/zuzeyka/Android/assets/75243441/f161aaf7-5372-45e1-98e9-486a3
 
 Sixth HW
 
-![photo_2024-02-15_20-42-03](https://github.com/zuzeyka/Android/assets/75243441/4f4a06e5-efc2-4600-90b4-95885e18c442)
+![photo_2024-02-16_12-35-41](https://github.com/zuzeyka/Android/assets/75243441/c6595fa7-1935-4eb4-9d15-6cf2427600ae)
