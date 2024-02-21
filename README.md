@@ -21,3 +21,11 @@ https://github.com/zuzeyka/Android/assets/75243441/f161aaf7-5372-45e1-98e9-486a3
 Sixth HW
 
 ![photo_2024-02-16_12-35-41](https://github.com/zuzeyka/Android/assets/75243441/c6595fa7-1935-4eb4-9d15-6cf2427600ae)
+
+Seventh HW
+
+https://github.com/zuzeyka/Android/assets/75243441/0b79c373-9be0-4baf-9b22-bb9d5a217c97
+
+Eighth HW
+
+https://github.com/zuzeyka/Android/assets/75243441/4720403d-eea9-49fa-8e12-1774e6a06528
