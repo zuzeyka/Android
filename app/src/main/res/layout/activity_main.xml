@@ -6,23 +6,11 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/funnyWordTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:text="Click the button to generate a funny word"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textAlignment="center"/>
-
     <Button
-        android:id="@+id/generateButton"
+        android:id="@+id/toggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generate"
-        android:layout_below="@id/funnyWordTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
+        android:text="Toggle Flashlight"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

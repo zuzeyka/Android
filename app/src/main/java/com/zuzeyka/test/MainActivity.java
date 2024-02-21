@@ -1,45 +1,61 @@
 package com.zuzeyka.test;
 
+import android.content.Context;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Random;
-
 public class MainActivity extends AppCompatActivity {
 
-    private TextView funnyWordTextView;
-    private Button generateButton;
-
-    private String[] funnyWords = {
-            "пенопласточка", "шоколадерка", "бананушка", "колбаскин", "картопелька",
-            "пельмешкин", "чебуречка", "пердушка", "кашалотик", "котикоптычек"
-    };
+    private CameraManager cameraManager;
+    private String cameraId;
+    private boolean isFlashOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        funnyWordTextView = findViewById(R.id.funnyWordTextView);
-        generateButton = findViewById(R.id.generateButton);
+        cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
 
-        generateButton.setOnClickListener(new View.OnClickListener() {
+        try {
+            cameraId = cameraManager.getCameraIdList()[0]; // получаем id первой камеры (обычно это задняя камера)
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+
+        Button toggleButton = findViewById(R.id.toggleButton);
+        toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                generateFunnyWord();
+            public void onClick(View v) {
+                toggleFlash();
             }
         });
     }
 
-    private void generateFunnyWord() {
-        Random random = new Random();
-        int index = random.nextInt(funnyWords.length);
-        String funnyWord = funnyWords[index];
-        funnyWordTextView.setText(funnyWord);
+    private void toggleFlash() {
+        try {
+            if (isFlashOn) {
+                turnOffFlash();
+            } else {
+                turnOnFlash();
+            }
+            isFlashOn = !isFlashOn;
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void turnOnFlash() throws CameraAccessException {
+        cameraManager.setTorchMode(cameraId, true);
+    }
+
+    private void turnOffFlash() throws CameraAccessException {
+        cameraManager.setTorchMode(cameraId, false);
     }
 
     public void updateTotalPrice() {
