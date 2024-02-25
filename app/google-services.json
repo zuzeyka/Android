@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "422828113542",
+    "project_id": "test-3085a",
+    "storage_bucket": "test-3085a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422828113542:android:de3af9edd2b9b1ee5b9b07",
+        "android_client_info": {
+          "package_name": "com.zuzeyka.test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYw_X8MiE5Hr9uYBhy_wmky2XxGvIKPe8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
