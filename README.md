@@ -29,3 +29,7 @@ https://github.com/zuzeyka/Android/assets/75243441/0b79c373-9be0-4baf-9b22-bb9d5
 Eighth HW
 
 https://github.com/zuzeyka/Android/assets/75243441/4720403d-eea9-49fa-8e12-1774e6a06528
+
+Ninth HW
+
+https://github.com/zuzeyka/Android/assets/75243441/b41c00db-3041-4cbf-9d25-2bbe5a2c13dd
