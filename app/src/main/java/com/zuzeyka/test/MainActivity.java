@@ -1,98 +1,75 @@
 package com.zuzeyka.test;
 
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.services.StatusesService;
 
-import java.util.ArrayList;
-import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText editText;
-    private Button sendButton;
-    private RecyclerView recyclerView;
-
-    private DatabaseReference databaseReference;
-    private List<String> dataList;
-    private RecyclerViewAdapter adapter;
+    private EditText editTextStatus;
+    private Button buttonTweet;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        editText = findViewById(R.id.editText);
-        sendButton = findViewById(R.id.sendButton);
-        recyclerView = findViewById(R.id.recyclerView);
+        Twitter.initialize(this);
 
-        // Инициализация базы данных Firebase
-        databaseReference = FirebaseDatabase.getInstance().getReference("messages");
-        dataList = new ArrayList<>();
+        editTextStatus = findViewById(R.id.editTextStatus);
+        buttonTweet = findViewById(R.id.buttonTweet);
 
-        // Установка адаптера для RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerViewAdapter(dataList);
-        recyclerView.setAdapter(adapter);
-
-        // Обработчик нажатия на кнопку отправки
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        buttonTweet.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                sendMessageToFirebase();
+            public void onClick(View v) {
+                updateStatus(editTextStatus.getText().toString());
             }
         });
-
-        // Загрузка данных из Firebase при запуске активити
-        loadDataFromFirebase();
     }
 
-    private void sendMessageToFirebase() {
-        String message = editText.getText().toString().trim();
-        if (!message.isEmpty()) {
-            // Создание уникального ключа для каждого сообщения
-            String messageId = databaseReference.push().getKey();
-            // Отправка сообщения в Firebase
-            databaseReference.child(messageId).setValue(message);
-            editText.setText("");
-            Toast.makeText(this, "Сообщение отправлено в базу данных Firebase", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Введите текст сообщения", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void loadDataFromFirebase() {
-        // Слушатель для загрузки данных из Firebase
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                dataList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String message = snapshot.getValue(String.class);
-                    dataList.add(message);
+    private void updateStatus(String status) {
+        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        if (session != null) {
+            StatusesService statusesService = TwitterCore.getInstance().getApiClient(session).getStatusesService();
+            Call<Tweet> call = statusesService.update(status, null, false, null, null, null, false, null);
+            call.enqueue(new Callback<Tweet>() {
+                @Override
+                public void onResponse(Call<Tweet> call, retrofit2.Response<Tweet> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(MainActivity.this, "Статус успешно обновлен", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Ошибка при обновлении статуса", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                adapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this, "Ошибка загрузки данных из Firebase", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<Tweet> call, Throwable t) {
+                    Toast.makeText(MainActivity.this, "Ошибка при обновлении статуса: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(MainActivity.this, "Пользователь не аутентифицирован", Toast.LENGTH_SHORT).show();
+        }
     }
     public void updateTotalPrice() {
     }
 }
+

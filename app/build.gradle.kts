@@ -1,15 +1,14 @@
 plugins {
     id("com.android.application")
-    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.zuzeyka.test"
-    compileSdkVersion(rootProject.extra["compileSdkVersion"] as Int)
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.zuzeyka.test"
-        minSdk = 33
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -20,7 +19,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -30,14 +32,13 @@ android {
 }
 
 dependencies {
-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
-    implementation ("com.google.firebase:firebase-database:20.0.0")
-    implementation("com.google.firebase:firebase-analytics")
+
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation ("com.android.support:appcompat-v7:28.0.0")
-    implementation("com.google.android.material:material:1.9.0")
-    implementation ("com.jjoe64:graphview:4.2.2")
+    implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    // https://mvnrepository.com/artifact/com.twitter.sdk.android/twitter-core
+    implementation ("com.twitter.sdk.android:twitter-core:5.1.1")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
