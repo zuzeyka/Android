@@ -1,73 +1,82 @@
 package com.zuzeyka.test;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ListView;
+import android.widget.Spinner;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.Twitter;
-import com.twitter.sdk.android.core.TwitterCore;
-import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterAuthClient;
-import com.twitter.sdk.android.core.models.Tweet;
-import com.twitter.sdk.android.core.services.StatusesService;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText editTextStatus;
-    private Button buttonTweet;
+    private Spinner senderSpinner;
+    private Spinner receiverSpinner;
+    private EditText amountEditText;
+    private Button transferButton;
+    private Button cancelButton;
+    private ListView accountsListView;
+
+    private List<Account> accounts;
+    private ArrayAdapter<Account> accountsAdapter;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Twitter.initialize(this);
+        senderSpinner = findViewById(R.id.senderSpinner);
+        receiverSpinner = findViewById(R.id.receiverSpinner);
+        amountEditText = findViewById(R.id.amountEditText);
+        transferButton = findViewById(R.id.transferButton);
+        cancelButton = findViewById(R.id.cancelButton);
+        accountsListView = findViewById(R.id.accountsListView);
 
-        editTextStatus = findViewById(R.id.editTextStatus);
-        buttonTweet = findViewById(R.id.buttonTweet);
+        accounts = new ArrayList<>();
+        accounts.add(new Account("A B", "1232339"));
+        accounts.add(new Account("B C", "2313123123"));
+        accounts.add(new Account("C D", "123123323"));
+        accounts.add(new Account("D F", "123123123123"));
+        accounts.add(new Account("B X", "5352352352"));
+        accounts.add(new Account("A Z", "5125235"));
 
-        buttonTweet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateStatus(editTextStatus.getText().toString());
-            }
+        ArrayAdapter<Account> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, accounts);
+        accountsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, accounts);
+        senderSpinner.setAdapter(spinnerAdapter);
+        receiverSpinner.setAdapter(spinnerAdapter);
+        accountsListView.setAdapter(accountsAdapter);
+
+        transferButton.setOnClickListener(view -> {
+            Account sender = (Account) senderSpinner.getSelectedItem();
+            Account receiver = (Account) receiverSpinner.getSelectedItem();
+            double amount = Double.parseDouble(amountEditText.getText().toString());
+
+            new Thread(() -> {
+                try {
+                    Thread.sleep(10000);
+                    double senderBalance = sender.getBalance();
+                    double receiverBalance = receiver.getBalance();
+                    sender.setBalance(senderBalance - amount);
+                    receiver.setBalance(receiverBalance + amount);
+                    runOnUiThread(() -> {
+                        accountsAdapter.notifyDataSetChanged();
+                    });
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         });
-    }
 
-    private void updateStatus(String status) {
-        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
-        if (session != null) {
-            StatusesService statusesService = TwitterCore.getInstance().getApiClient(session).getStatusesService();
-            Call<Tweet> call = statusesService.update(status, null, false, null, null, null, false, null);
-            call.enqueue(new Callback<Tweet>() {
-                @Override
-                public void onResponse(Call<Tweet> call, retrofit2.Response<Tweet> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "Статус успешно обновлен", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(MainActivity.this, "Ошибка при обновлении статуса", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Tweet> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "Ошибка при обновлении статуса: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            Toast.makeText(MainActivity.this, "Пользователь не аутентифицирован", Toast.LENGTH_SHORT).show();
-        }
+        cancelButton.setOnClickListener(view -> {
+            cancelButton.setEnabled(false);
+            new Handler().postDelayed(() -> cancelButton.setEnabled(true), 10000);
+        });
     }
     public void updateTotalPrice() {
     }
